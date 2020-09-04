@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Nav from './components/Nav';
 import Auth from './authentication/Auth';
+import Callback from './pages/Callback';
 
 export default function App (props) {
   const auth = new Auth(props.history);
@@ -12,6 +13,7 @@ export default function App (props) {
       <Nav />
       <div className="body">
         <Route path='/' exact render={props => <Home auth={auth} {...props} />} />
+        <Route path='/callback' render={props => <Callback auth={auth} {...props} />} />
         <Route path='/profile' component={Profile} />
       </div>
     </>
