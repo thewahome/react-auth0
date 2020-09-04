@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import Private from './pages/Private';
 import Public from './pages/Public';
 import Nav from './components/Nav';
 import Auth from './authentication/Auth';
@@ -19,6 +20,12 @@ export default function App (props) {
           auth.isAuthenticated() ?
             <Profile auth={auth} {...props} /> : (
               <Redirect to='/' />
+            )
+        } />
+        <Route path='/private' render={props =>
+          auth.isAuthenticated() ?
+            <Private auth={auth} {...props} /> : (
+              auth.login()
             )
         } />
         <Route component={Public} path='/public' />

@@ -16,13 +16,13 @@ const checkJwt = jwt({
 })
 
 const api = express();
-api.use(checkJwt);
 
 api.get('/public', function (req, res) {
   res.json({
     message: 'Hello from a public api'
   });
 });
+api.use(checkJwt);
 
 api.get('/private', checkJwt, function (req, res) {
   res.json({
