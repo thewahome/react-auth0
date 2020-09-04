@@ -14,6 +14,7 @@ export default class Auth {
     };
     this.history = history;
     this.auth0 = new auth0.WebAuth(this.config);
+    this.userProfile = null;
   }
 
   login = () => {
@@ -57,6 +58,23 @@ export default class Auth {
     this.auth0.logout({
       clientID: this.config.clientID,
       returnTo: process.env.REACT_APP_BASE_URL
+    });
+    this.userProfile = null;
+  }
+
+  getAccessToken = () => {
+    const accessToken = localStorage.getItem('access_token');
+    if (!accessToken) {
+      throw new Error(' No access token found');
+    }
+    return accessToken;
+  }
+
+  getProfile = cb => {
+    if (this.userProfile) return cb(this.userProfile);
+    this.auth0.client.userInfo(this.getAccessToken(), (err, profile) => {
+      if (profile) this.userProfile = profile;
+      cb(profile, err);
     })
   }
 }

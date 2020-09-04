@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Nav from './components/Nav';
@@ -14,7 +14,12 @@ export default function App (props) {
       <div className="body">
         <Route path='/' exact render={props => <Home auth={auth} {...props} />} />
         <Route path='/callback' render={props => <Callback auth={auth} {...props} />} />
-        <Route path='/profile' component={Profile} />
+        <Route path='/profile' render={props =>
+          auth.isAuthenticated() ?
+            <Profile auth={auth} {...props} /> : (
+              <Redirect to='/' />
+            )
+        } />
       </div>
     </>
   );
