@@ -11,6 +11,7 @@
     "react-router-dom": "^16.13.1",
     "react-scripts": "3.4.3"
   },
+  "proxy": "http://localhost:3001",
   "scripts": {
     "start": "run-p start:client start:server",
     "start:client": "react-scripts start",

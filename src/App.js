@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import Public from './pages/Public';
 import Nav from './components/Nav';
 import Auth from './authentication/Auth';
 import Callback from './pages/Callback';
@@ -20,6 +21,7 @@ export default function App (props) {
               <Redirect to='/' />
             )
         } />
+        <Route component={Public} path='/public' />
       </div>
     </>
   );
