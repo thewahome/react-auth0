@@ -11,7 +11,7 @@ export default class Auth {
       redirectUri: process.env.REACT_APP_AUTH0_CALLBACK_URL,
       audience: process.env.REACT_APP_AUTH0_AUDIENCE,
       responseType: 'token id_token',
-      scope: 'openid profile email'
+      scope: 'openid profile email read:courses'
     };
     this.history = history;
     this.auth0 = new auth0.WebAuth(this.config);
@@ -42,9 +42,12 @@ export default class Auth {
       authResult.expiresIn * 1000 + new Date().getTime()
     );
 
+    const scopes = authResult.scope || this.config.scope || '';
+
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
+    localStorage.setItem('scopes', JSON.stringify(scopes));
   }
 
   isAuthenticated () {
@@ -56,6 +59,7 @@ export default class Auth {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
+    localStorage.removeItem('scopes');
     this.auth0.logout({
       clientID: this.config.clientID,
       returnTo: process.env.REACT_APP_BASE_URL
@@ -77,5 +81,18 @@ export default class Auth {
       if (profile) this.userProfile = profile;
       cb(profile, err);
     })
+  }
+
+  userHasScopes = (scopes) => {
+    const savedScopes = JSON.parse(localStorage.getItem('scopes'));
+    if (!savedScopes) return false;
+    if (!scopes.length === 0) return false;
+    const grantedScopes = savedScopes.split(' ');
+    for (var i = 0; i < scopes.length; i++) {
+      if (grantedScopes.indexOf(scopes[i]) < 0) {
+        return false;
+      }
+    }
+    return true;
   }
 }

@@ -7,6 +7,7 @@ import Public from './pages/Public';
 import Nav from './components/Nav';
 import Auth from './authentication/Auth';
 import Callback from './pages/Callback';
+import Courses from './pages/Courses';
 
 export default function App (props) {
   const auth = new Auth(props.history);
@@ -25,6 +26,12 @@ export default function App (props) {
         <Route path='/private' render={props =>
           auth.isAuthenticated() ?
             <Private auth={auth} {...props} /> : (
+              auth.login()
+            )
+        } />
+        <Route path='/courses' render={props =>
+          auth.isAuthenticated() && auth.userHasScopes(['read:courses']) ?
+            <Courses auth={auth} {...props} /> : (
               auth.login()
             )
         } />
